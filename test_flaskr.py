@@ -5,7 +5,7 @@ import unittest
 from dotenv import find_dotenv, load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
-from flaskr import create_app
+from flaskr import app
 from models import Question, setup_db
 
 # Load environment variables from .env
@@ -19,7 +19,7 @@ class TriviaTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app()
+        self.app = app
         self.client = self.app.test_client
         setup_db(self.app, TEST_DATABASE_URL)
 

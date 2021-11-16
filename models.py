@@ -23,7 +23,7 @@ setup_db(app)
 
 
 def setup_db(app, database_path=SQLALCHEMY_DATABASE_URL):
-    app.config["SQLALCHEMY_DATABASE_URL"] = database_path
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS
     app.config["SQLALCHEMY_ECHO"] = SQLALCHEMY_ECHO
     app.config['FLASK_APP'] = FLASK_APP
