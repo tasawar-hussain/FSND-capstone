@@ -13,6 +13,9 @@ load_dotenv(find_dotenv())
 
 TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL")
 
+ADMIN_TOKEN = os.environ.get("TEST_ADMIN_TOKEN")
+PLAYER_TOKEN = os.environ.get("TEST_PLAYER_TOKEN")
+
 
 class TriviaTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -21,7 +24,7 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = app
         self.client = self.app.test_client
-        setup_db(self.app, TEST_DATABASE_URL)
+        setup_db(self.app, TEST_DATABASE_URL, False)
 
         # binds the app to the current context
         with self.app.app_context():
@@ -35,6 +38,14 @@ class TriviaTestCase(unittest.TestCase):
             "answer": "China",
             "difficulty": "3",
             "category": "2"
+        }
+
+        self.admin_headers = {
+            'Authorization': 'Bearer {}'.format(ADMIN_TOKEN)
+        }
+
+        self.player_headers = {
+            'Authorization': 'Bearer {}'.format(PLAYER_TOKEN)
         }
 
     def tearDown(self):
@@ -66,7 +77,8 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["message"], "resource not found")
 
     def test_create_new_question(self):
-        res = self.client().post("/questions", json=self.new_question)
+        res = self.client().post("/questions", json=self.new_question,
+                                 headers=self.admin_headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -76,7 +88,8 @@ class TriviaTestCase(unittest.TestCase):
     def test_422_if_question_answer_is_missing(self):
         data = self.new_question
         del data['answer']
-        res = self.client().post("/questions", json=self.new_question)
+        res = self.client().post("/questions", json=self.new_question,
+                                 headers=self.admin_headers)
 
         data = json.loads(res.data)
 
@@ -86,7 +99,8 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_delete_question(self):
         question_id = Question.query.first().id  # to avoid 404 on re running tests
-        res = self.client().delete(f"/questions/{question_id}")
+        res = self.client().delete(
+            f"/questions/{question_id}", headers=self.admin_headers)
         data = json.loads(res.data)
 
         question = Question.query.filter(
@@ -121,7 +135,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["current_category"], category_id)
 
     def test_422_if_search_term_missing(self):
-        res = self.client().post('/questions', json={})
+        res = self.client().post('/questions', json={}, headers=self.admin_headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -135,7 +149,8 @@ class TriviaTestCase(unittest.TestCase):
                                      'previous_questions': previous_questions,
                                      'quiz_category':
                                      {'type': None, 'id': None}
-                                 }
+                                 },
+                                 headers=self.player_headers
                                  )
         data = json.loads(res.data)
 

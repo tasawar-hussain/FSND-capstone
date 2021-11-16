@@ -280,8 +280,9 @@ def bad_request(error):
 
 @app.errorhandler(AuthError)
 def auth_error(error):
+    message = error.error.get('message', "")
     return jsonify({
         "success": False,
         "error": error.status_code,
-        "message": error.error['description']
+        "message": message
     }), error.status_code

@@ -54,7 +54,7 @@ def get_token_auth_header():
             'error': 401
         }, 401)
 
-    token_type, token_value, extra = authorization.split(' ')
+    token_type, token_value, *extra = authorization.split(' ')
     if token_type.lower() != 'bearer':
         raise AuthError({
             'success': False,

@@ -22,7 +22,7 @@ setup_db(app)
 '''
 
 
-def setup_db(app, database_path=SQLALCHEMY_DATABASE_URL):
+def setup_db(app, database_path=SQLALCHEMY_DATABASE_URL, isDEBUG=False):
     # https://help.heroku.com/ZKNTJQSK/why-is-sqlalchemy-1-4-x-not-connecting-to-heroku-postgres
     if database_path.startswith("postgres://"):
         database_path = database_path.replace(
@@ -33,6 +33,7 @@ def setup_db(app, database_path=SQLALCHEMY_DATABASE_URL):
     app.config["SQLALCHEMY_ECHO"] = SQLALCHEMY_ECHO
     app.config['FLASK_APP'] = FLASK_APP
     app.config['FLASK_ENV'] = FLASK_ENV
+    app.config['DEBUG'] = isDEBUG
     db.app = app
     db.init_app(app)
     db.create_all()
