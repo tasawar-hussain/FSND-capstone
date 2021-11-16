@@ -19,12 +19,6 @@ Completing this trivia app will give you the ability to structure plan, implemen
 - [pip >= 21.1](https://pypi.org/project/pip/)
 - [PostgreSQL >= v10](https://www.postgresql.org/)
 
-#### Frontend Dependencies
-Change current working directory to `.frontend` and the run below command to install dependencies
-```
-npm install
-```
-
 #### Backend Dependencies
 
 Change current working directory to `/backend`, activate virtual environment and the run below command to install dependencies
@@ -48,12 +42,8 @@ flask run --reload
 Setting the `FLASK_ENV` variable to `development` abd --reload flag will detect file changes and restart the server automatically.
 Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` directory.
 
-## Running the Frontend
-
-Run the below command to start the frontend server. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-```
-npm start
-```
+## AUTH0 - Tokens
+https://poma.auth0.com/authorize?audience=trivia&response_type=token&client_id=r0CDcb8xF7ZBpDqpnRz17Y4yQFvXDUJ2&redirect_uri=http://localhost:5000/
 
 ## Testing
 To run the tests, run
@@ -161,7 +151,7 @@ The API will return three types of errors:
 #### POST /questions
 
 * General:
-  * Creates a new question using the submitted question, answer, difficlulty and category id.
+  * Creates a new question using the submitted question, answer, difficulty and category id.
   * Returns the id of the created question, question id, answer, success value, and total question
 * Sample: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{
             "question": "Which team would win Cricket T20 2021 worldcup?",
@@ -261,6 +251,11 @@ Can play quiz
 Permissions:
 
 - `play:quiz`
+
+
+## Deployment:
+App is deployed at heroku: https://fsnd-capstone-trivia.herokuapp.com/categories
+
 ## Authors
 
 [Tasawar Hussain](https://github.com/tasawar-hussain)

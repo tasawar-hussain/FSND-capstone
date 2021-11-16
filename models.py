@@ -23,6 +23,11 @@ setup_db(app)
 
 
 def setup_db(app, database_path=SQLALCHEMY_DATABASE_URL):
+    # https://help.heroku.com/ZKNTJQSK/why-is-sqlalchemy-1-4-x-not-connecting-to-heroku-postgres
+    if database_path.startswith("postgres://"):
+        database_path = database_path.replace(
+            "postgres://", "postgresql://", 1)
+
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS
     app.config["SQLALCHEMY_ECHO"] = SQLALCHEMY_ECHO
